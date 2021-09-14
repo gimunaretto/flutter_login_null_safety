@@ -8,8 +8,8 @@ class LoginUpload {
   factory LoginUpload.fromJson(Map<String, dynamic> json) =>
       _$LoginUploadFromJson(json);
 
-  String login;
-  String senha;
+  String? login;
+  String? senha;
 
   Map<String, dynamic> toJson() => _$LoginUploadToJson(this);
 }

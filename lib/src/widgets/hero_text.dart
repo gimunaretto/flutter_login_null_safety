@@ -13,10 +13,10 @@ enum ViewState {
 class _HeroTextContent extends StatefulWidget {
   _HeroTextContent(
     this.text, {
-    Key key,
-    @required this.viewState,
-    @required this.smallFontSize,
-    @required this.largeFontSize,
+    Key? key,
+    required this.viewState,
+    required this.smallFontSize,
+    required this.largeFontSize,
     this.style,
     this.textAlign,
     this.textDirection,
@@ -31,13 +31,13 @@ class _HeroTextContent extends StatefulWidget {
   final double smallFontSize;
   final double largeFontSize;
 
-  final TextAlign textAlign;
-  final TextDirection textDirection;
-  final double textScaleFactor;
+  final TextAlign? textAlign;
+  final TextDirection? textDirection;
+  final double? textScaleFactor;
   final int maxLines;
-  final Locale locale;
-  final StrutStyle strutStyle;
-  final TextStyle style;
+  final Locale? locale;
+  final StrutStyle? strutStyle;
+  final TextStyle? style;
 
   @override
   __HeroTextContentState createState() => __HeroTextContentState();
@@ -45,9 +45,9 @@ class _HeroTextContent extends StatefulWidget {
 
 class __HeroTextContentState extends State<_HeroTextContent>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _fontSizeTween;
-  double fontSize;
+  late AnimationController _controller;
+  late Animation<double> _fontSizeTween;
+  double? fontSize;
 
   @override
   void initState() {
@@ -128,7 +128,7 @@ class __HeroTextContentState extends State<_HeroTextContent>
       type: MaterialType.transparency,
       child: AutoSizeText(
         widget.text,
-        style: widget.style.copyWith(fontSize: fontSize),
+        style: widget.style!.copyWith(fontSize: fontSize),
         textAlign: widget.textAlign,
         textDirection: widget.textDirection,
         textScaleFactor: widget.textScaleFactor,
@@ -146,9 +146,9 @@ class __HeroTextContentState extends State<_HeroTextContent>
 class HeroText extends StatelessWidget {
   HeroText(
     this.text, {
-    Key key,
-    @required this.tag,
-    @required this.viewState,
+    Key? key,
+    required this.tag,
+    required this.viewState,
     this.smallFontSize = 15.0,
     this.largeFontSize = 48.0,
     this.style,
@@ -169,12 +169,12 @@ class HeroText extends StatelessWidget {
   final double largeFontSize;
 
   final TextAlign textAlign;
-  final TextDirection textDirection;
-  final double textScaleFactor;
+  final TextDirection? textDirection;
+  final double? textScaleFactor;
   final int maxLines;
-  final Locale locale;
-  final StrutStyle strutStyle;
-  final TextStyle style;
+  final Locale? locale;
+  final StrutStyle? strutStyle;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -226,12 +226,12 @@ class HeroText extends StatelessWidget {
 
 class HeroTextWidget extends StatelessWidget {
   HeroTextWidget({
-    Key key,
+    Key? key,
     this.child,
-    @required this.tag,
+    required this.tag,
   }) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
   final Object tag;
 
   @override

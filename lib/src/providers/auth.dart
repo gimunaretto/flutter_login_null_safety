@@ -8,7 +8,7 @@ enum AuthMode { Signup, Login }
 typedef AuthCallback = Future<String> Function(LoginUpload);
 
 /// The result is an error message, callback successes if message is null
-typedef RecoverCallback = Future<String> Function(String);
+typedef RecoverCallback = Future<String> Function(String?);
 
 class Auth with ChangeNotifier {
   Auth({
@@ -22,9 +22,9 @@ class Auth with ChangeNotifier {
         this._senha = senha,
         this._confirmPassword = confirmPassword;
 
-  final AuthCallback onLogin;
-  final AuthCallback onSignup;
-  final RecoverCallback onRecoverPassword;
+  final AuthCallback? onLogin;
+  final AuthCallback? onSignup;
+  final RecoverCallback? onRecoverPassword;
 
   AuthMode _mode = AuthMode.Login;
 
@@ -52,21 +52,21 @@ class Auth with ChangeNotifier {
   }
 
   String _login = '';
-  get login => _login;
+  String get login => _login;
   set login(String login) {
     _login = login;
     notifyListeners();
   }
 
   String _senha = '';
-  get senha => _senha;
+  String get senha => _senha;
   set senha(String senha) {
     _senha = senha;
     notifyListeners();
   }
 
   String _confirmPassword = '';
-  get confirmPassword => _confirmPassword;
+  String get confirmPassword => _confirmPassword;
   set confirmPassword(String confirmPassword) {
     _confirmPassword = confirmPassword;
     notifyListeners();

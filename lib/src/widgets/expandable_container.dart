@@ -7,9 +7,9 @@ enum ExpandableContainerState {
 
 class ExpandableContainer extends StatefulWidget {
   ExpandableContainer({
-    Key key,
-    @required this.child,
-    @required this.controller,
+    Key? key,
+    required this.child,
+    required this.controller,
     this.onExpandCompleted,
     this.alignment,
     this.backgroundColor,
@@ -20,15 +20,15 @@ class ExpandableContainer extends StatefulWidget {
     this.initialState = ExpandableContainerState.shrunk,
   }) : super(key: key);
 
-  final AnimationController controller;
-  final Function onExpandCompleted;
+  final AnimationController? controller;
+  final Function? onExpandCompleted;
   final Widget child;
-  final Alignment alignment;
-  final Color backgroundColor;
-  final Color color;
-  final double width;
-  final double height;
-  final EdgeInsetsGeometry padding;
+  final Alignment? alignment;
+  final Color? backgroundColor;
+  final Color? color;
+  final double? width;
+  final double? height;
+  final EdgeInsetsGeometry? padding;
   final ExpandableContainerState initialState;
 
   @override
@@ -36,25 +36,25 @@ class ExpandableContainer extends StatefulWidget {
 }
 
 class _ExpandableContainerState extends State<ExpandableContainer> {
-  Animation<double> _sizeAnimation;
-  Animation<Offset> _slideAnimation;
-  AnimationController _controller;
+  late Animation<double> _sizeAnimation;
+  late Animation<Offset> _slideAnimation;
+  AnimationController? _controller;
 
   @override
   void initState() {
     super.initState();
 
     if (widget.initialState == ExpandableContainerState.expanded) {
-      _controller = widget.controller..value = 1;
+      _controller = widget.controller!..value = 1;
     } else {
-      _controller = widget.controller..value = 0;
+      _controller = widget.controller!..value = 0;
     }
 
     _sizeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate(CurvedAnimation(
-      parent: _controller,
+      parent: _controller!,
       curve: const Interval(0.0, .6875, curve: Curves.bounceOut),
       reverseCurve: const Interval(0.0, .6875, curve: Curves.bounceIn),
     ));
@@ -62,12 +62,12 @@ class _ExpandableContainerState extends State<ExpandableContainer> {
       begin: const Offset(-1, 0),
       end: const Offset(0, 0),
     ).animate(CurvedAnimation(
-      parent: _controller,
+      parent: _controller!,
       curve: const Interval(.6875, 1.0, curve: Curves.fastOutSlowIn),
     ))
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
-          widget?.onExpandCompleted();
+          widget.onExpandCompleted!();
         }
       });
   }

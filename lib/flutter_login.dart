@@ -28,7 +28,7 @@ export 'src/providers/login_theme.dart';
 
 class _AnimationTimeDilationDropdown extends StatelessWidget {
   _AnimationTimeDilationDropdown({
-    @required this.onChanged,
+    required this.onChanged,
     this.initialValue = 1.0,
   });
 
@@ -58,7 +58,7 @@ class _AnimationTimeDilationDropdown extends StatelessWidget {
               ),
               itemExtent: 30.0,
               backgroundColor: Colors.white,
-              onSelectedItemChanged: onChanged,
+              onSelectedItemChanged: onChanged as void Function(int)?,
               children:
                   animationSpeeds.map((x) => AutoSizeText('x$x')).toList(),
             ),
@@ -78,16 +78,16 @@ class _Header extends StatefulWidget {
     this.height = 250.0,
     this.logoController,
     // this.titleController,
-    @required this.loginTheme,
+    required this.loginTheme,
   });
 
-  final String logoPath;
-  final String logoTag;
+  final String? logoPath;
+  final String? logoTag;
   // final String title;
   // final String titleTag;
   final double height;
   final LoginTheme loginTheme;
-  final AnimationController logoController;
+  final AnimationController? logoController;
   // final AnimationController titleController;
 
   @override
@@ -146,7 +146,7 @@ class __HeaderState extends State<_Header> {
 
     Widget logo = displayLogo
         ? Image.asset(
-            widget.logoPath,
+            widget.logoPath!,
             filterQuality: FilterQuality.high,
             height: logoHeight,
           )
@@ -154,7 +154,7 @@ class __HeaderState extends State<_Header> {
 
     if (widget.logoTag != null) {
       logo = Hero(
-        tag: widget.logoTag,
+        tag: widget.logoTag!,
         child: logo,
       );
     }
@@ -207,7 +207,7 @@ class __HeaderState extends State<_Header> {
 
 class FlutterLogin extends StatefulWidget {
   FlutterLogin({
-    Key key,
+    Key? key,
     this.onSignup,
     this.onLogin,
     this.onRecoverPassword,
@@ -224,43 +224,43 @@ class FlutterLogin extends StatefulWidget {
   }) : super(key: key);
 
   /// Called when the user hit the submit button when in sign up mode
-  final AuthCallback onSignup;
+  final AuthCallback? onSignup;
 
   /// Called when the user hit the submit button when in login mode
-  final AuthCallback onLogin;
+  final AuthCallback? onLogin;
 
   /// Called when the user hit the submit button when in recover senha mode
-  final RecoverCallback onRecoverPassword;
+  final RecoverCallback? onRecoverPassword;
 
   /// The large text above the login [Card], usually the app or company name
   // final String title;
 
   /// The path to the asset image that will be passed to the `Image.asset()`
-  final String logo;
+  final String? logo;
 
   /// Describes all of the labels, text hints, button texts and other auth
   /// descriptions
-  final LoginMessages messages;
+  final LoginMessages? messages;
 
   /// FlutterLogin's theme. If not specified, it will use the default theme as
   /// shown in the demo gifs and use the colorsheme in the closest `Theme`
   /// widget
-  final LoginTheme theme;
+  final LoginTheme? theme;
 
   /// Login validating logic, Returns an error string to display if the input is
   /// invalid, or null otherwise
-  final FormFieldValidator<String> loginValidator;
+  final FormFieldValidator<String>? loginValidator;
 
   /// Same as [loginValidator] but for senha
-  final FormFieldValidator<String> senhaValidator;
+  final FormFieldValidator<String>? senhaValidator;
 
   /// Called after the submit animation's completed. Put your route transition
   /// logic here. Recommend to use with [logoTag] and [titleTag]
-  final Function onSubmitAnimationCompleted;
+  final Function? onSubmitAnimationCompleted;
 
   /// Hero tag for logo image. If not specified, it will simply fade out when
   /// changing route
-  final String logoTag;
+  final String? logoTag;
 
   /// Hero tag for title text. Need to specify `LoginTheme.beforeHeroFontSize`
   /// and `LoginTheme.afterHeroFontSize` if you want different font size before
@@ -273,14 +273,14 @@ class FlutterLogin extends StatefulWidget {
   final bool showDebugButtons;
 
   static final FormFieldValidator<String> defaultLoginValidator = (value) {
-    if (value.isEmpty) {
+    if (value!.isEmpty) {
       return 'Usuário não preenchido';
     }
     return null;
   };
 
   static final FormFieldValidator<String> defaultPasswordValidator = (value) {
-    if (value.isEmpty) {
+    if (value!.isEmpty) {
       return 'Senha não preenchida';
     }
     return null;
@@ -294,9 +294,9 @@ class _FlutterLoginState extends State<FlutterLogin>
     with TickerProviderStateMixin {
   final GlobalKey<AuthCardState> authCardKey = GlobalKey();
   static const loadingDuration = const Duration(milliseconds: 400);
-  AnimationController _loadingController;
-  AnimationController _logoController;
-  AnimationController _titleController;
+  AnimationController? _loadingController;
+  AnimationController? _logoController;
+  late AnimationController _titleController;
   double _selectTimeDilation = 1.0;
 
   @override
@@ -309,11 +309,11 @@ class _FlutterLoginState extends State<FlutterLogin>
       duration: loadingDuration,
     )..addStatusListener((status) {
         if (status == AnimationStatus.forward) {
-          _logoController.forward();
+          _logoController!.forward();
           _titleController.forward();
         }
         if (status == AnimationStatus.reverse) {
-          _logoController.reverse();
+          _logoController!.reverse();
           _titleController.reverse();
         }
       });
@@ -327,21 +327,21 @@ class _FlutterLoginState extends State<FlutterLogin>
     );
 
     Future.delayed(const Duration(seconds: 1), () {
-      _loadingController.forward();
+      _loadingController!.forward();
     });
   }
 
   @override
   void dispose() {
     super.dispose();
-    _loadingController.dispose();
-    _logoController.dispose();
+    _loadingController!.dispose();
+    _logoController!.dispose();
     _titleController.dispose();
   }
 
   void _reverseHeaderAnimation() {
     if (widget.logoTag == null) {
-      _logoController.reverse();
+      _logoController!.reverse();
     }
     // if (widget.titleTag == null) {
     //   _titleController.reverse();
@@ -404,32 +404,34 @@ class _FlutterLoginState extends State<FlutterLogin>
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 primary: Colors.blue),
             child: AutoSizeText('LOADING', style: textStyle),
-            onPressed: () => authCardKey.currentState.runLoadingAnimation(),
+            onPressed: () => authCardKey.currentState!.runLoadingAnimation(),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 primary: Colors.orange),
             child: AutoSizeText('PAGE', style: textStyle),
-            onPressed: () => authCardKey.currentState.runChangePageAnimation(),
+            onPressed: () => authCardKey.currentState!.runChangePageAnimation(),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 primary: Colors.red),
             child: AutoSizeText('NAV', style: textStyle),
-            onPressed: () => authCardKey.currentState.runChangeRouteAnimation(),
+            onPressed: () =>
+                authCardKey.currentState!.runChangeRouteAnimation(),
           ),
         ],
       ),
     );
   }
 
-  ThemeData _mergeTheme({ThemeData theme, LoginTheme loginTheme}) {
+  ThemeData _mergeTheme(
+      {required ThemeData theme, required LoginTheme loginTheme}) {
     final originalPrimaryColor = loginTheme.primaryColor ?? theme.primaryColor;
     final primaryDarkShades = getDarkShades(originalPrimaryColor);
     final primaryColor = primaryDarkShades.length == 1
-        ? lighten(primaryDarkShades.first)
+        ? lighten(primaryDarkShades.first!)
         : primaryDarkShades.first;
     final primaryColorDark = primaryDarkShades.length >= 3
         ? primaryDarkShades[2]
@@ -437,25 +439,25 @@ class _FlutterLoginState extends State<FlutterLogin>
     final accentColor = loginTheme.accentColor ?? theme.accentColor;
     final errorColor = loginTheme.errorColor ?? theme.errorColor;
     // the background is a dark gradient, force to use white text if detect default black text color
-    final isDefaultBlackText = theme.textTheme.headline3.color ==
-        Typography.blackMountainView.headline3.color;
-    final titleStyle = theme.textTheme.headline3
+    final isDefaultBlackText = theme.textTheme.headline3!.color ==
+        Typography.blackMountainView.headline3!.color;
+    final titleStyle = theme.textTheme.headline3!
         .copyWith(
           color: loginTheme.accentColor ??
               (isDefaultBlackText
                   ? Colors.white
-                  : theme.textTheme.headline3.color),
+                  : theme.textTheme.headline3!.color),
           fontSize: loginTheme.beforeHeroFontSize,
           fontWeight: FontWeight.w300,
         )
         .merge(loginTheme.titleStyle);
-    final textStyle = theme.textTheme.bodyText2
+    final textStyle = theme.textTheme.bodyText2!
         .copyWith(color: Colors.black54)
         .merge(loginTheme.bodyStyle);
-    final textFieldStyle = theme.textTheme.subtitle1
+    final textFieldStyle = theme.textTheme.subtitle1!
         .copyWith(color: Colors.black.withOpacity(.65), fontSize: 14)
         .merge(loginTheme.textFieldStyle);
-    final buttonStyle = theme.textTheme.button
+    final buttonStyle = theme.textTheme.button!
         .copyWith(color: Colors.white)
         .merge(loginTheme.buttonStyle);
     final cardTheme = loginTheme.cardTheme;
@@ -482,7 +484,7 @@ class _FlutterLoginState extends State<FlutterLogin>
         filled: inputTheme.filled,
         fillColor: inputTheme.fillColor ??
             Color.alphaBlend(
-              primaryColor.withOpacity(.07),
+              primaryColor!.withOpacity(.07),
               Colors.grey.withOpacity(.04),
             ),
         contentPadding: inputTheme.contentPadding ??
@@ -498,7 +500,7 @@ class _FlutterLoginState extends State<FlutterLogin>
         focusedBorder: inputTheme.focusedBorder ??
             inputTheme.border ??
             OutlineInputBorder(
-              borderSide: BorderSide(color: primaryColor, width: 1.5),
+              borderSide: BorderSide(color: primaryColor!, width: 1.5),
               borderRadius: roundBorderRadius,
             ),
         errorBorder: inputTheme.errorBorder ??
@@ -516,7 +518,7 @@ class _FlutterLoginState extends State<FlutterLogin>
         disabledBorder: inputTheme.disabledBorder ?? inputTheme.border,
       ),
       floatingActionButtonTheme: theme.floatingActionButtonTheme.copyWith(
-        backgroundColor: buttonTheme?.backgroundColor ?? primaryColor,
+        backgroundColor: buttonTheme.backgroundColor ?? primaryColor,
         splashColor: buttonTheme.splashColor ?? theme.accentColor,
         elevation: buttonTheme.elevation ?? 4.0,
         highlightElevation: buttonTheme.highlightElevation ?? 2.0,
@@ -543,9 +545,9 @@ class _FlutterLoginState extends State<FlutterLogin>
     const cardInitialHeight = 240;
     final cardTopPosition = deviceSize.height / 2 - cardInitialHeight / 2;
     final headerHeight = cardTopPosition - headerMargin;
-    final loginValidator =
+    final String? Function(String?) loginValidator =
         widget.loginValidator ?? FlutterLogin.defaultLoginValidator;
-    final senhaValidator =
+    final String? Function(String?) senhaValidator =
         widget.senhaValidator ?? FlutterLogin.defaultPasswordValidator;
 
     return MultiProvider(

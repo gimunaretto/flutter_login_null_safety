@@ -8,7 +8,7 @@ class CustomPageTransformer extends PageTransformer {
   @override
   Widget transform(Widget child, TransformInfo info) {
     final transform = Matrix.perspective();
-    final position = info.position;
+    final position = info.position!;
     final pageDt = 1 - position.abs();
 
     if (position > 0) {

@@ -8,8 +8,8 @@ part of 'LoginUpload.dart';
 
 LoginUpload _$LoginUploadFromJson(Map<String, dynamic> json) {
   return LoginUpload(
-    login: json['login'] as String,
-    senha: json['senha'] as String,
+    login: json['login'] as String?,
+    senha: json['senha'] as String?,
   );
 }
 
